@@ -51,7 +51,10 @@ import { NavType, NavQueryType } from "../types";
   flex-direction: column;
   border-radius: 10px;
   box-shadow: 0 7px 10px 5px rgba(134, 140, 146, 0.3);
-  margin: 0 auto;
+  margin: 20px auto 0;
   width: 250px;
+  position: sticky;
+  margin-top: 20px;
+  top: 40px;
 }
 </style>

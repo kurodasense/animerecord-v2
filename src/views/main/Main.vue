@@ -17,9 +17,6 @@
   display: flex;
 
   .left-nav {
-    position: sticky;
-    top: 0px;
-    margin-top: 20px;
     margin-left: 10px;
     width: 500px;
   }
