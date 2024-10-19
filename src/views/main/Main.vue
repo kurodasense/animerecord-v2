@@ -18,7 +18,7 @@
 
   .left-nav {
     margin-left: 10px;
-    width: 500px;
+    width: 400px;
   }
 
   .right-content {
