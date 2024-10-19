@@ -1,7 +1,13 @@
 <template>
-  <RouterView />
+  <div class="app">
+    <Main />
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Main from "@/views/main/Main.vue";
+</script>
 
-<style scoped></style>
+<style lang="less">
+@import "@/assets/css/base.css";
+</style>
