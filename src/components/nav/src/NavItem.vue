@@ -1,8 +1,8 @@
 <template>
   <div class="nav-item">
     <nav-popover
-      :placeholder="props.placeholder || ''"
-      :queryType="props.queryType || 0"
+      :placeholder="props.placeholder"
+      :queryType="props.queryType"
       :navType="props.type"
     >
       <template #item>

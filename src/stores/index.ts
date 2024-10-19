@@ -1,12 +1,17 @@
-import { ref, computed } from "vue";
 import { defineStore } from "pinia";
+import type { IRootState } from "./types";
 
-export const useCounterStore = defineStore("counter", () => {
-  const count = ref(0);
-  const doubleCount = computed(() => count.value * 2);
-  function increment() {
-    count.value++;
+const useRootState = defineStore("root", {
+  state: (): IRootState => {
+    return {
+      token: ""
+    };
+  },
+  actions: {
+    setToken(token: string) {
+      this.token = token;
+    }
   }
-
-  return { count, doubleCount, increment };
 });
+
+export default useRootState;

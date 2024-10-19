@@ -4,8 +4,9 @@ export enum NavType {
 }
 
 export enum NavQueryType {
-  addNewAnimeDate,
-  checkPermission
+  addNewAnimeDate = "addNewAnimeDate",
+  checkPermission = "getPermission",
+  null = "null"
 }
 
 export interface INavItem {
