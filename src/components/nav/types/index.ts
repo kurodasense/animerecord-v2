@@ -15,10 +15,10 @@ export interface INavItem {
   activeColor: string;
   type: NavType;
   placeholder?: string;
-  queryType?: NavQueryType;
+  queryType: NavQueryType;
 }
 
-export type INavBase = Omit<INavItem, "type" | "placeholder">;
+export type INavBase = Omit<INavItem, "type" | "placeholder" | "queryType">;
 
 export interface INavPopover {
   placeholder?: string;

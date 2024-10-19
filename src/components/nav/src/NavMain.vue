@@ -1,13 +1,26 @@
 <template>
   <div class="nav-main">
     <!-- 主页 -->
-    <NavItem :type="NavType.menu" path="/home" name="首页" activeColor="#2a5caa">
+    <NavItem
+      :type="NavType.menu"
+      :queryType="NavQueryType.null"
+      path="/home"
+      name="首页"
+      activeColor="#2a5caa"
+    >
       <template #item-icon>
         <HomeFilled />
       </template>
     </NavItem>
     <!-- 归档 -->
-    <NavItem :type="NavType.menu" class="item" path="/directory" name="归档" activeColor="#2a5caa">
+    <NavItem
+      :type="NavType.menu"
+      :queryType="NavQueryType.null"
+      class="item"
+      path="/directory"
+      name="归档"
+      activeColor="#2a5caa"
+    >
       <template #item-icon>
         <Management />
       </template>
