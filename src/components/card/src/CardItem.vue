@@ -4,10 +4,10 @@
       <div class="card-header">
         <span v-if="isUpdateDateName" style="width: 80px">
           <el-input
-            v-model="props.date.date_name"
+            v-model="tempModelValue"
             ref="dateNameInputRef"
             @blur="hideUpdateDateName"
-            @change="updateDateName"
+            @keyup.enter="updateDateName"
           ></el-input>
         </span>
         <span v-else @dblclick="dblClick">{{ props.date.date_name }}</span>
@@ -40,11 +40,11 @@
         <template #default="scope">
           <span v-if="scope.row.index === tabClickIndex && tabClickLabel === 'anime_name'">
             <el-input
-              v-model="scope.row.anime_name"
+              v-model="tempModelValue"
               autosize
               ref="elInputRef"
               @blur="inputBlur"
-              @change="updateAnimeName(scope.row)"
+              @keyup.enter="updateAnimeName(scope.row)"
             />
           </span>
           <span v-else>{{ scope.row.anime_name }}</span>
@@ -54,10 +54,10 @@
         <template #default="scope">
           <span v-if="scope.row.index === tabClickIndex && tabClickLabel === 'watch_status'">
             <el-input
-              v-model="scope.row.watch_status"
+              v-model="tempModelValue"
               ref="elinput"
               @blur="inputBlur"
-              @change="updateWatchStatus(scope.row)"
+              @keyup.enter="updateWatchStatus(scope.row)"
             />
           </span>
           <span v-else>{{ scope.row.watch_status }}</span>
@@ -77,11 +77,13 @@ import {
 } from "@/service/api";
 import { ElInput, ElMessage } from "element-plus";
 import moment from "moment";
-import type { IRecordType } from "../types";
+import type { IDateType, IRecordType } from "../types";
 
 const props = defineProps<{
-  date: any;
+  date: IDateType;
 }>();
+
+const waterfallRerender = inject<() => void>("waterfallRerender"); // 注入父组件方法
 
 const record = ref<IRecordType[]>([]);
 const tabClickIndex = ref(null);
@@ -90,6 +92,7 @@ const isUpdateDateName = ref(false);
 const loading = ref(false);
 const elInputRef = ref<InstanceType<typeof ElInput>>();
 const dateNameInputRef = ref<InstanceType<typeof ElInput>>();
+const tempModelValue = ref("");
 
 onMounted(async () => {
   try {
@@ -106,6 +109,7 @@ onMounted(async () => {
     ElMessage.error(msg);
   } finally {
     loading.value = false;
+    waterfallRerender?.();
   }
 });
 
@@ -128,6 +132,7 @@ const tableRowClassName = ({ row, rowIndex }: any) => {
 const tabClick = (row: any, column: any) => {
   tabClickIndex.value = row.index;
   tabClickLabel.value = column.label;
+  tempModelValue.value = row[column.property];
   nextTick(() => {
     elInputRef.value?.focus();
   });
@@ -141,48 +146,54 @@ const inputBlur = () => {
 const updateAnimeName = async (row: any) => {
   loading.value = true;
   try {
+    if (tempModelValue.value === row.anime_name) return;
     tabClickIndex.value = null;
     tabClickLabel.value = "";
-    let recordId = row.recordId;
+    let recordId = row.record_id;
     if (!recordId) {
       recordId = moment().format("YYYYMMDDHHmms");
     }
     const res = await updateNewAnimeRecord(
       recordId,
       props.date.date_id,
-      row.anime_name,
+      tempModelValue.value,
       row.watch_status
     );
     const { status, msg } = res.data;
     if (status === 200) {
       row.record_id = recordId;
       loading.value = false;
+      row.anime_name = tempModelValue.value;
+      ElMessage.success(`修改名称成功`);
     } else {
       ElMessage.error(msg);
     }
   } catch (err: any) {
     const { msg } = err.response.data;
     ElMessage.error(msg);
-    row.anime_name = "";
   } finally {
     loading.value = false;
+    inputBlur();
   }
 };
 
 const updateWatchStatus = async (row: any) => {
   tabClickIndex.value = null;
   tabClickLabel.value = "";
-  let { record_id, anime_name, watch_status } = row;
+  const { record_id, anime_name } = row;
   loading.value = true;
   try {
+    if (tempModelValue.value === row.watch_status) return;
     const res = await updateNewAnimeWatchStatus(
       record_id,
       props.date.date_id,
       anime_name,
-      watch_status
+      tempModelValue.value
     );
     const { status, msg } = res.data;
     if (status === 200) {
+      ElMessage.success(`修改状态成功`);
+      row.watch_status = tempModelValue.value;
     } else {
       ElMessage.error(msg);
     }
@@ -196,6 +207,7 @@ const updateWatchStatus = async (row: any) => {
 
 const addRecord = () => {
   record.value.push({ anime_name: "new anime", watch_status: "待看" });
+  waterfallRerender?.();
 };
 
 const delRecord = async () => {
@@ -218,22 +230,31 @@ const delRecord = async () => {
 
 const dblClick = () => {
   isUpdateDateName.value = true;
+  tempModelValue.value = props.date.date_name;
   nextTick(() => {
     dateNameInputRef.value?.focus();
+    waterfallRerender?.();
   });
 };
 
 const hideUpdateDateName = () => {
   isUpdateDateName.value = false;
+  waterfallRerender?.();
 };
 
 const updateDateName = async () => {
   loading.value = true;
   try {
+    if (tempModelValue.value === props.date.date_name) {
+      return;
+    }
     const res = await updateRecordDateName(props.date.date_id, props.date.date_name);
     const { status, msg } = res.data;
     if (status === 200) {
       isUpdateDateName.value = false;
+      ElMessage.success(`修改日期成功`);
+      console.log(tempModelValue.value);
+      props.date.date_name = tempModelValue.value;
     } else {
       ElMessage.error(msg);
     }
@@ -242,6 +263,8 @@ const updateDateName = async () => {
     ElMessage.error(msg);
   } finally {
     loading.value = false;
+    isUpdateDateName.value = false;
+    waterfallRerender?.();
   }
 };
 </script>

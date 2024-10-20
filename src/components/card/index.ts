@@ -1,3 +1,3 @@
-import type CardItem from "./src/CardItem.vue";
+import CardItem from "./src/CardItem.vue";
 
 export default CardItem;

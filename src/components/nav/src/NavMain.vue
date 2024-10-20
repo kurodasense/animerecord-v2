@@ -67,7 +67,6 @@ import { NavType, NavQueryType } from "../types";
   margin: 20px auto 0;
   width: 250px;
   position: sticky;
-  margin-top: 20px;
-  top: 40px;
+  top: 20px;
 }
 </style>
