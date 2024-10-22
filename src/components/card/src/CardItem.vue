@@ -248,7 +248,7 @@ const updateDateName = async () => {
     if (tempModelValue.value === props.date.date_name) {
       return;
     }
-    const res = await updateRecordDateName(props.date.date_id, props.date.date_name);
+    const res = await updateRecordDateName(props.date.date_id, tempModelValue.value);
     const { status, msg } = res.data;
     if (status === 200) {
       isUpdateDateName.value = false;

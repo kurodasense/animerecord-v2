@@ -5,7 +5,7 @@
     <Waterfall
       v-else
       ref="waterfallRef"
-      :list="anime_date"
+      :list="sortedAnimeDates"
       :width="400"
       align="left"
       background-color="#f5f7f8"
@@ -27,6 +27,18 @@ const loading = ref(false);
 const anime_date = ref<any[]>([]);
 const waterfallRef = ref<InstanceType<typeof Waterfall>>();
 
+const sortedAnimeDates = computed(() => {
+  return anime_date.value.sort((a, b) => {
+    const [a_year, a_month] = a.date_name.split(".");
+    const [b_year, b_month] = b.date_name.split(".");
+    if (a_year > b_year) return 1;
+    else if (a_year < b_year) return -1;
+    else {
+      return a_month - b_month;
+    }
+  });
+});
+
 const getData = async () => {
   loading.value = true;
   try {
@@ -34,15 +46,6 @@ const getData = async () => {
     const { status, msg, data } = res.data;
     if (status === 200) {
       anime_date.value = data;
-      anime_date.value.sort((a, b) => {
-        const [a_year, a_month] = a.date_name.split(".");
-        const [b_year, b_month] = b.date_name.split(".");
-        if (a_year > b_year) return 1;
-        else if (a_year < b_year) return -1;
-        else {
-          return a_month - b_month;
-        }
-      });
     } else {
       ElMessage.error(msg);
     }
