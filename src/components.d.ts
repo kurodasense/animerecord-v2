@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     CardItem: typeof import('./components/card/src/CardItem.vue')['default']
+    DirectoryItem: typeof import('./views/directory/cpns/DirectoryItem.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElEmpty: typeof import('element-plus/es')['ElEmpty']
@@ -17,6 +18,8 @@ declare module 'vue' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElText: typeof import('element-plus/es')['ElText']
+    ElTimeline: typeof import('element-plus/es')['ElTimeline']
+    ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     NavBase: typeof import('./components/nav/src/NavBase.vue')['default']
     NavItem: typeof import('./components/nav/src/NavItem.vue')['default']
     NavMain: typeof import('./components/nav/src/NavMain.vue')['default']

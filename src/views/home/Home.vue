@@ -19,18 +19,19 @@
 
 <script setup lang="ts">
 import { getAnimeDate } from "@/service/api";
+import type { IAnimeDate } from "@/service/types";
 import { ElMessage } from "element-plus";
 import { Waterfall } from "vue-waterfall-plugin-next";
 import "vue-waterfall-plugin-next/dist/style.css";
 
 const loading = ref(false);
-const anime_date = ref<any[]>([]);
+const anime_date = ref<IAnimeDate[]>([]);
 const waterfallRef = ref<InstanceType<typeof Waterfall>>();
 
 const sortedAnimeDates = computed(() => {
-  return anime_date.value.sort((a, b) => {
-    const [a_year, a_month] = a.date_name.split(".");
-    const [b_year, b_month] = b.date_name.split(".");
+  return anime_date.value.toSorted((a, b) => {
+    const [a_year, a_month] = a.date_name.split(".").map(parseInt);
+    const [b_year, b_month] = b.date_name.split(".").map(parseInt);
     if (a_year > b_year) return 1;
     else if (a_year < b_year) return -1;
     else {
