@@ -15,9 +15,10 @@
 <style scoped lang="less">
 .main {
   display: flex;
+  margin-left: 10px;
+  margin-right: 40px;
 
   .left-nav {
-    margin-left: 10px;
     width: 400px;
   }
 
