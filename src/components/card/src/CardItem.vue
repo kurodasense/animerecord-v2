@@ -1,70 +1,75 @@
 <template>
-  <el-card ref="cardItemRef" class="box-card" v-loading="loading">
-    <template #header>
-      <div class="card-header">
-        <span v-if="isUpdateDateName" style="width: 80px">
-          <el-input
-            v-model="tempModelValue"
-            ref="dateNameInputRef"
-            @blur="hideUpdateDateName"
-            @keyup.enter="updateDateName"
-          ></el-input>
-        </span>
-        <span v-else @dblclick="dblClick">{{ props.date.date_name }}</span>
-        <div style="text-align: right">
-          <el-popover placement="top" trigger="click">
-            <template #reference>
-              <el-button class="button" type="danger" text>删除记录表</el-button>
-            </template>
-            <el-text tag="p" type="danger">确认删除?</el-text>
-            <div style="text-align: right; margin-top: 10px">
-              <el-button size="small" type="primary" @click="delRecord">确认</el-button>
-            </div>
-          </el-popover>
-          <el-button class="button" text @click="addRecord">添加追番</el-button>
+  <div ref="cardItemRef" v-loading="loading" class="box-card">
+    <el-card>
+      <template #header>
+        <div class="card-header">
+          <span v-if="isUpdateDateName" style="width: 80px">
+            <el-input
+              v-model="tempModelValue"
+              ref="dateNameInputRef"
+              @blur="hideUpdateDateName"
+              @keyup.enter="updateDateName"
+            ></el-input>
+          </span>
+          <span v-else @dblclick="dblClick">{{ props.date.date_name }}</span>
+          <div style="text-align: right">
+            <el-popover placement="top" trigger="click">
+              <template #reference>
+                <el-button class="button" type="danger" text>删除记录表</el-button>
+              </template>
+              <el-text tag="p" type="danger">确认删除?</el-text>
+              <div style="text-align: right; margin-top: 10px">
+                <el-button size="small" type="primary" @click="delRecord">确认</el-button>
+              </div>
+            </el-popover>
+            <el-button v-if="record.length > 10" class="button" text @click="export2Image"
+              >导出为图片</el-button
+            >
+            <el-button class="button" text @click="addRecord">添加追番</el-button>
+          </div>
         </div>
-      </div>
-    </template>
-    <el-empty v-if="record.length <= 0" description="暂无记录捏" />
-    <el-table
-      v-else
-      :data="record"
-      border
-      style="width: 100%"
-      :show-header="false"
-      :cell-style="cellStyle"
-      :row-class-name="tableRowClassName"
-      @cell-dblclick="tabClick"
-    >
-      <el-table-column prop="anime_name" label="anime_name" width="auto">
-        <template #default="scope">
-          <span v-if="scope.row.index === tabClickIndex && tabClickLabel === 'anime_name'">
-            <el-input
-              v-model="tempModelValue"
-              autosize
-              ref="elInputRef"
-              @blur="inputBlur"
-              @keyup.enter="updateAnimeName(scope.row)"
-            />
-          </span>
-          <span v-else>{{ scope.row.anime_name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="watch_status" label="watch_status" width="80" align="center">
-        <template #default="scope">
-          <span v-if="scope.row.index === tabClickIndex && tabClickLabel === 'watch_status'">
-            <el-input
-              v-model="tempModelValue"
-              ref="elinput"
-              @blur="inputBlur"
-              @keyup.enter="updateWatchStatus(scope.row)"
-            />
-          </span>
-          <span v-else>{{ scope.row.watch_status }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
-  </el-card>
+      </template>
+      <el-empty v-if="record.length <= 0" description="暂无记录捏" />
+      <el-table
+        v-else
+        :data="record"
+        border
+        style="width: 100%"
+        :show-header="false"
+        :cell-style="cellStyle"
+        :row-class-name="tableRowClassName"
+        @cell-dblclick="tabClick"
+      >
+        <el-table-column prop="anime_name" label="anime_name" width="auto">
+          <template #default="scope">
+            <span v-if="scope.row.index === tabClickIndex && tabClickLabel === 'anime_name'">
+              <el-input
+                v-model="tempModelValue"
+                autosize
+                ref="elInputRef"
+                @blur="inputBlur"
+                @keyup.enter="updateAnimeName(scope.row)"
+              />
+            </span>
+            <span v-else>{{ scope.row.anime_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="watch_status" label="watch_status" width="80" align="center">
+          <template #default="scope">
+            <span v-if="scope.row.index === tabClickIndex && tabClickLabel === 'watch_status'">
+              <el-input
+                v-model="tempModelValue"
+                ref="elinput"
+                @blur="inputBlur"
+                @keyup.enter="updateWatchStatus(scope.row)"
+              />
+            </span>
+            <span v-else>{{ scope.row.watch_status }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -75,8 +80,9 @@ import {
   updateNewAnimeWatchStatus,
   updateRecordDateName
 } from "@/service/api";
-import { ElInput, ElMessage } from "element-plus";
+import { ElCard, ElInput, ElMessage } from "element-plus";
 import moment from "moment";
+import html2canvas from "html2canvas";
 import type { IDateType, IRecordType } from "../types";
 
 const props = defineProps<{
@@ -92,6 +98,7 @@ const isUpdateDateName = ref(false);
 const loading = ref(false);
 const elInputRef = ref<InstanceType<typeof ElInput>>();
 const dateNameInputRef = ref<InstanceType<typeof ElInput>>();
+const cardItemRef = ref<InstanceType<typeof ElCard>>();
 const tempModelValue = ref("");
 
 onMounted(async () => {
@@ -205,6 +212,23 @@ const updateWatchStatus = async (row: any) => {
   }
 };
 
+const export2Image = async () => {
+  loading.value = true;
+  try {
+    const canvas = await html2canvas(cardItemRef.value as unknown as HTMLElement);
+    canvas.toBlob((blob) => {
+      const item = new ClipboardItem({ "image/png": blob as Blob });
+      navigator.clipboard.write([item]).then(() => {
+        ElMessage.success(`图片导出成功，已复制到粘贴板`);
+      });
+    });
+  } catch (err: any) {
+    ElMessage.error(err);
+  } finally {
+    loading.value = false;
+  }
+};
+
 const addRecord = () => {
   record.value.push({ anime_name: "new anime", watch_status: "待看" });
   waterfallRerender?.();
@@ -275,6 +299,11 @@ const updateDateName = async () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .button {
+      margin: 0;
+      padding: 0 12px;
+    }
   }
 }
 </style>

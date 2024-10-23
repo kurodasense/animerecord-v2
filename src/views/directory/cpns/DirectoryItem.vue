@@ -14,7 +14,7 @@
       </el-table-column>
       <el-table-column width="90" align="center">
         <template #default="scope">
-          <el-popover placement="top" trigger="click">
+          <el-popover ref="elPopoverRef" placement="top" trigger="click">
             <template #reference>
               <el-button type="danger" text>删除</el-button>
             </template>
@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { deleteAnime, getAnimeRecordByDateId } from "@/service/api";
 import type { IAnimeDate } from "@/service/types";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElPopover } from "element-plus";
 
 const props = defineProps<{
   date: IAnimeDate;
@@ -40,6 +40,7 @@ const props = defineProps<{
 
 const record = ref<any[]>([]);
 const loading = ref(false);
+const elPopoverRef = ref<InstanceType<typeof ElPopover>>();
 
 onMounted(() => {
   getAnimeRecord();
@@ -82,6 +83,7 @@ const delAnime = async (row: any) => {
     const { status, msg } = res.data;
     if (status === 200) {
       record.value.splice(record.value.indexOf(row), 1);
+      ElMessage.success(`已删除 ${anime_name}`);
     } else {
       ElMessage.error(msg);
     }
@@ -90,6 +92,7 @@ const delAnime = async (row: any) => {
     ElMessage.error(msg);
   } finally {
     loading.value = false;
+    elPopoverRef.value?.hide();
   }
 };
 </script>
