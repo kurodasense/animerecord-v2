@@ -6,7 +6,7 @@
       v-else
       ref="waterfallRef"
       :list="sortedAnimeDates"
-      :width="400"
+      :width="410"
       align="left"
       background-color="#f5f7f8"
     >
