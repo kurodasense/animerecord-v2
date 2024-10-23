@@ -59,7 +59,7 @@
             <span v-if="scope.row.index === tabClickIndex && tabClickLabel === 'watch_status'">
               <el-input
                 v-model="tempModelValue"
-                ref="elinput"
+                ref="elInputRef"
                 @blur="inputBlur"
                 @keyup.enter="updateWatchStatus(scope.row)"
               />
