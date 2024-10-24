@@ -7,7 +7,7 @@ export async function getAnimeDate() {
   });
 }
 
-export async function getAnimeRecordByDateId(date_id) {
+export async function getAnimeRecordByDateId(date_id: string) {
   return await request({
     url: "/api/getAnimeRecordByDateId",
     method: "get",
@@ -15,7 +15,12 @@ export async function getAnimeRecordByDateId(date_id) {
   });
 }
 
-export async function updateNewAnimeRecord(record_id, date_id, anime_name, watch_status) {
+export async function updateNewAnimeRecord(
+  record_id: string,
+  date_id: string,
+  anime_name: string,
+  watch_status: string
+) {
   return await request({
     url: "/api/updateNewAnimeRecord",
     method: "post",
@@ -23,7 +28,12 @@ export async function updateNewAnimeRecord(record_id, date_id, anime_name, watch
   });
 }
 
-export async function updateNewAnimeWatchStatus(record_id, date_id, anime_name, watch_status) {
+export async function updateNewAnimeWatchStatus(
+  record_id: string,
+  date_id: string,
+  anime_name: string,
+  watch_status: string
+) {
   return await request({
     url: "/api/updateNewAnimeWatchStatus",
     method: "post",
@@ -31,7 +41,7 @@ export async function updateNewAnimeWatchStatus(record_id, date_id, anime_name, 
   });
 }
 
-export async function addNewAnimeDate(date_name) {
+export async function addNewAnimeDate(date_name: string) {
   return await request({
     url: "/api/addNewAnimeDate",
     method: "post",
@@ -39,7 +49,7 @@ export async function addNewAnimeDate(date_name) {
   });
 }
 
-export async function deleteAnimeRecord(date_id) {
+export async function deleteAnimeRecord(date_id: string) {
   return await request({
     url: "/api/deleteAnimeRecord",
     method: "post",
@@ -47,7 +57,7 @@ export async function deleteAnimeRecord(date_id) {
   });
 }
 
-export async function updateRecordDateName(date_id, date_name) {
+export async function updateRecordDateName(date_id: string, date_name: string) {
   return await request({
     url: "/api/updateRecordDateName",
     method: "post",
@@ -55,7 +65,7 @@ export async function updateRecordDateName(date_id, date_name) {
   });
 }
 
-export async function deleteAnime(record_id, date_id, anime_name) {
+export async function deleteAnime(record_id: string, date_id: string, anime_name: string) {
   return await request({
     url: "/api/deleteAnime",
     method: "post",
@@ -63,7 +73,7 @@ export async function deleteAnime(record_id, date_id, anime_name) {
   });
 }
 
-export async function getPermission(secret) {
+export async function getPermission(secret: string) {
   return await request({
     url: "/permission/permission",
     method: "post",
