@@ -24,6 +24,7 @@ declare module 'vue' {
     ElText: typeof import('element-plus/es')['ElText']
     ElTimeline: typeof import('element-plus/es')['ElTimeline']
     ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
+    ElUpload: typeof import('element-plus/es')['ElUpload']
     NavBase: typeof import('./components/nav/src/NavBase.vue')['default']
     NavItem: typeof import('./components/nav/src/NavItem.vue')['default']
     NavMain: typeof import('./components/nav/src/NavMain.vue')['default']

@@ -12,6 +12,28 @@
       <el-table-column prop="anime_name" label="anime_name" width="auto"> </el-table-column>
       <el-table-column prop="watch_status" label="watch_status" width="90" align="center">
       </el-table-column>
+      <el-table-column width="140" align="center">
+        <template #default="scope">
+          <el-popover ref="elPopoverRef" placement="top" trigger="click">
+            <template #reference>
+              <el-button type="primary" text>上传预览图片</el-button>
+            </template>
+            <el-upload
+              drag
+              :http-request="
+                (options: UploadRequestOptions) => handleUploadImage(options, scope.row)
+              "
+              :show-file-list="false"
+            >
+              <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+              <div class="el-upload__text">拖拽图片或者<em>点击上传</em></div>
+              <template #tip>
+                <div class="el-upload__tip">基于picgo上传到个人github仓库</div>
+              </template>
+            </el-upload>
+          </el-popover>
+        </template>
+      </el-table-column>
       <el-table-column width="90" align="center">
         <template #default="scope">
           <el-popover ref="elPopoverRef" placement="top" trigger="click">
@@ -30,9 +52,9 @@
 </template>
 
 <script setup lang="ts">
-import { deleteAnime, getAnimeRecordByDateId } from "@/service/api";
-import type { IAnimeDate } from "@/service/types";
-import { ElMessage, ElPopover } from "element-plus";
+import { deleteAnime, getAnimeRecordByDateId, uploadImage } from "@/service/api";
+import type { IAnimeDate, IAnimeRecord } from "@/service/types";
+import { ElMessage, ElPopover, type UploadRequestOptions } from "element-plus";
 
 const props = defineProps<{
   date: IAnimeDate;
@@ -93,6 +115,30 @@ const delAnime = async (row: any) => {
   } finally {
     loading.value = false;
     elPopoverRef.value?.hide();
+  }
+};
+
+const handleUploadImage = async (options: UploadRequestOptions, row: IAnimeRecord) => {
+  loading.value = true;
+  const { file } = options;
+  try {
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("recordId", row.record_id);
+    formData.append("dateId", row.date_id);
+    const res = await uploadImage(formData);
+    const { status, msg } = res.data;
+    if (status === 200) {
+      // 处理响应
+      ElMessage.success(`上传成功`);
+    } else {
+      ElMessage.error(msg);
+    }
+  } catch (err: any) {
+    const { msg } = err.response.data;
+    ElMessage.error(msg);
+  } finally {
+    loading.value = false;
   }
 };
 </script>

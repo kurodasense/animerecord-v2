@@ -70,3 +70,11 @@ export async function getPermission(secret) {
     data: { secret }
   });
 }
+
+export async function uploadImage(formData: FormData) {
+  return await request({
+    url: "/api/uploadImage",
+    method: "post",
+    data: formData
+  });
+}
