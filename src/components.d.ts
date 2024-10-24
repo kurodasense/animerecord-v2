@@ -8,16 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     CardItem: typeof import('./components/card/src/CardItem.vue')['default']
-    DirectoryItem: typeof import('./views/directory/cpns/DirectoryItem.vue')['default']
-    DropDown: typeof import('./components/card/src/DropDown.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
-    ElDropdown: typeof import('element-plus/es')['ElDropdown']
-    ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
-    ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
     ElEmpty: typeof import('element-plus/es')['ElEmpty']
     ElIcon: typeof import('element-plus/es')['ElIcon']
-    ElInput: typeof import('element-plus/es')['ElInput']
     ElPopover: typeof import('element-plus/es')['ElPopover']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
@@ -29,7 +23,6 @@ declare module 'vue' {
     NavItem: typeof import('./components/nav/src/NavItem.vue')['default']
     NavMain: typeof import('./components/nav/src/NavMain.vue')['default']
     NavPopover: typeof import('./components/nav/src/NavPopover.vue')['default']
-    NavPopper: typeof import('./components/nav/src/NavPopover.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
