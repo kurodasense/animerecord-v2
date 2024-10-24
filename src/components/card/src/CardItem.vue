@@ -13,7 +13,7 @@
           </span>
           <span v-else @dblclick="dblClick">{{ props.date.date_name }}</span>
           <div style="text-align: right">
-            <el-popover placement="top" trigger="click">
+            <el-popover ref="elPopoverRef" placement="top" trigger="click">
               <template #reference>
                 <el-button class="button" type="danger" text>删除记录表</el-button>
               </template>
@@ -51,7 +51,22 @@
                 @keyup.enter="updateAnimeName(scope.row)"
               />
             </span>
-            <span v-else>{{ scope.row.anime_name }}</span>
+            <span v-else
+              ><el-popover
+                width="500"
+                placement="top"
+                trigger="hover"
+                :show-after="1000"
+                :disabled="scope.row.image_url == null"
+              >
+                <template #default>
+                  <div style="display: flex; justify-content: center">
+                    <el-image :src="scope.row.image_url" fit="contain" />
+                  </div>
+                </template>
+                <template #reference> {{ scope.row.anime_name }} </template>
+              </el-popover></span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="watch_status" label="watch_status" width="80" align="center">
@@ -80,11 +95,10 @@ import {
   updateNewAnimeWatchStatus,
   updateRecordDateName
 } from "@/service/api";
-import { ElCard, ElInput, ElMessage } from "element-plus";
+import { ElCard, ElInput, ElMessage, ElPopover } from "element-plus";
 import moment from "moment";
 import html2canvas from "html2canvas";
 import type { IDateType, IRecordType } from "../types";
-
 const props = defineProps<{
   date: IDateType;
 }>();
@@ -99,6 +113,7 @@ const loading = ref(false);
 const elInputRef = ref<InstanceType<typeof ElInput>>();
 const dateNameInputRef = ref<InstanceType<typeof ElInput>>();
 const cardItemRef = ref<InstanceType<typeof ElCard>>();
+const elPopoverRef = ref<InstanceType<typeof ElPopover>>();
 const tempModelValue = ref("");
 
 onMounted(async () => {
@@ -249,6 +264,7 @@ const delRecord = async () => {
     ElMessage.error(msg);
   } finally {
     loading.value = false;
+    elPopoverRef.value?.hide();
   }
 };
 

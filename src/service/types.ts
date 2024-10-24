@@ -14,4 +14,5 @@ export interface IAnimeRecord {
   date_id: string;
   anime_name: string;
   watch_status: string;
+  image_url: string;
 }
