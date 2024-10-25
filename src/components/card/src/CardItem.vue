@@ -115,6 +115,7 @@ const dateNameInputRef = ref<InstanceType<typeof ElInput>>();
 const cardItemRef = ref<InstanceType<typeof ElCard>>();
 const elPopoverRef = ref<InstanceType<typeof ElPopover>>();
 const tempModelValue = ref("");
+const emits = defineEmits(["updateDate"]);
 
 onMounted(async () => {
   try {
@@ -293,8 +294,7 @@ const updateDateName = async () => {
     if (status === 200) {
       isUpdateDateName.value = false;
       ElMessage.success(`修改日期成功`);
-      console.log(tempModelValue.value);
-      props.date.date_name = tempModelValue.value;
+      emits("updateDate", props.date, tempModelValue.value);
     } else {
       ElMessage.error(msg);
     }

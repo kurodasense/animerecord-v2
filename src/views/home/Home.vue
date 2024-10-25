@@ -11,7 +11,7 @@
       background-color="#f5f7f8"
     >
       <template #default="{ item }">
-        <card-item :date="item" :key="item.date_id" />
+        <card-item :date="item" :key="item.date_id" @updateDate="handleUpdateDate" />
       </template>
     </Waterfall>
   </div>
@@ -61,6 +61,12 @@ const getData = async () => {
 onMounted(() => {
   getData();
 });
+
+const handleUpdateDate = (date: IAnimeDate, value: string) => {
+  const index = anime_date.value.findIndex((item) => item.date_id === date.date_id);
+  anime_date.value[index].date_name = value;
+  waterfallRerender();
+};
 
 const waterfallRerender = () => {
   waterfallRef.value?.renderer();
