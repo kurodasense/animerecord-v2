@@ -79,7 +79,7 @@ import {
 import { ElCard, ElInput, ElMessage, ElPopover } from "element-plus";
 import moment from "moment";
 import type { IDateType, IRecordType } from "../types";
-import { handleError } from "@/utils";
+import { downloadImage, handleError } from "@/utils";
 import type { IAnimeDate } from "@/service/types";
 import html2canvas from "html2canvas";
 const props = defineProps<{
@@ -217,13 +217,10 @@ const handleExpor2Image = async () => {
   try {
     const canvas = await html2canvas(cardItemRef.value as unknown as HTMLElement);
     canvas.toBlob((blob) => {
-      const item = new ClipboardItem({ "image/png": blob as Blob });
-      navigator.clipboard.write([item]).then(() => {
-        ElMessage.success(`图片导出成功，已复制到粘贴板`);
-      });
+      downloadImage(blob!);
+      ElMessage.success(`导出图片成功`);
     });
   } catch (err: any) {
-    console.log(err);
     handleError(err);
   } finally {
     loading.value = false;
