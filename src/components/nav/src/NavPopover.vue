@@ -1,7 +1,7 @@
 <template>
   <el-popover
     trigger="click"
-    @hide="hidePopover"
+    @hide="handleHidePopover"
     @show="showPopover"
     :width="300"
     placement="bottom"
@@ -41,7 +41,7 @@ const showPopover = () => {
   elInputRef.value?.focus();
 };
 
-const hidePopover = () => {
+const handleHidePopover = () => {
   inputValueRef.value = "";
 };
 
@@ -53,7 +53,6 @@ const handleConfirm = async () => {
         const res = await addNewAnimeDate(inputValueRef.value);
         const { status, msg } = res.data;
         if (status === 200) {
-          console.log(inputValueRef.value);
           ElMessage.success(`添加记录 ${inputValueRef.value} 成功`);
           // todo: 重新获取追番数据
         } else {
@@ -66,23 +65,27 @@ const handleConfirm = async () => {
       } finally {
         loading.close();
         elPopoverRef.value?.hide();
-        hidePopover();
+        handleHidePopover();
       }
       break;
     case NavQueryType.checkPermission:
       try {
         const res = await getPermission(inputValueRef.value);
-        const { msg, data } = res.data;
-        const { token } = data;
-        ElMessage.success(`权限验证成功`);
-        rootStore.setToken(token);
+        const { status, msg, data } = res.data;
+        if (status === 200) {
+          const { token } = data;
+          ElMessage.success(`权限验证成功`);
+          rootStore.setToken(token);
+        } else {
+          ElMessage.success(msg);
+        }
       } catch (err: any) {
         const { msg } = err.response.data;
         ElMessage.error(`${msg}`);
       } finally {
         loading.close();
         elPopoverRef.value?.hide();
-        hidePopover();
+        handleHidePopover();
       }
       break;
     default:
