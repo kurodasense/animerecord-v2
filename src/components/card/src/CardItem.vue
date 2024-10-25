@@ -2,32 +2,14 @@
   <div ref="cardItemRef" v-loading="loading" class="box-card">
     <el-card>
       <template #header>
-        <div class="card-header">
-          <span v-if="isUpdateDateName" style="width: 80px">
-            <el-input
-              v-model="tempModelValue"
-              ref="dateNameInputRef"
-              @blur="hideUpdateDateName"
-              @keyup.enter="updateDateName"
-            ></el-input>
-          </span>
-          <span v-else @dblclick="dblClick">{{ props.date.date_name }}</span>
-          <div style="text-align: right">
-            <el-popover ref="elPopoverRef" placement="top" trigger="click">
-              <template #reference>
-                <el-button class="button" type="danger" text>删除记录表</el-button>
-              </template>
-              <el-text tag="p" type="danger">确认删除?</el-text>
-              <div style="text-align: right; margin-top: 10px">
-                <el-button size="small" type="primary" @click="delRecord">确认</el-button>
-              </div>
-            </el-popover>
-            <el-button v-if="record.length > 10" class="button" text @click="export2Image"
-              >导出为图片</el-button
-            >
-            <el-button class="button" text @click="addRecord">添加追番</el-button>
-          </div>
-        </div>
+        <CardHeader
+          :date="props.date"
+          :recordLength="record.length"
+          @updateLoading="handleUpdateLoading"
+          @updateDate="handleUpdateDate"
+          @expor2Image="handleExpor2Image"
+          @addRecord="handleAddRecord"
+        />
       </template>
       <el-empty v-if="record.length <= 0" description="暂无记录捏" />
       <el-table
@@ -88,39 +70,35 @@
 </template>
 
 <script setup lang="ts">
+import CardHeader from "./CardHeader.vue";
 import {
-  deleteAnimeRecord,
   getAnimeRecordByDateId,
   updateNewAnimeRecord,
-  updateNewAnimeWatchStatus,
-  updateRecordDateName
+  updateNewAnimeWatchStatus
 } from "@/service/api";
 import { ElCard, ElInput, ElMessage, ElPopover } from "element-plus";
 import moment from "moment";
-import html2canvas from "html2canvas";
 import type { IDateType, IRecordType } from "../types";
 import { handleError } from "@/utils";
+import type { IAnimeDate } from "@/service/types";
+import html2canvas from "html2canvas";
 const props = defineProps<{
   date: IDateType;
 }>();
-
 const waterfallRerender = inject<() => void>("waterfallRerender"); // 注入父组件方法
 
 const record = ref<IRecordType[]>([]);
 const tabClickIndex = ref(null);
 const tabClickLabel = ref("");
-const isUpdateDateName = ref(false);
 const loading = ref(false);
 const elInputRef = ref<InstanceType<typeof ElInput>>();
-const dateNameInputRef = ref<InstanceType<typeof ElInput>>();
-const cardItemRef = ref<InstanceType<typeof ElCard>>();
-const elPopoverRef = ref<InstanceType<typeof ElPopover>>();
+const cardItemRef = ref<HTMLDivElement>();
 const tempModelValue = ref("");
 const emits = defineEmits(["updateDate"]);
 
 onMounted(async () => {
+  loading.value = true;
   try {
-    loading.value = true;
     const res = await getAnimeRecordByDateId(props.date.date_id);
     const { status, msg, data } = res.data;
     if (status === 200) {
@@ -129,8 +107,7 @@ onMounted(async () => {
       ElMessage.error(msg);
     }
   } catch (err: any) {
-    const { msg } = err.response.data;
-    ElMessage.error(msg);
+    handleError(err);
   } finally {
     loading.value = false;
     waterfallRerender?.();
@@ -227,7 +204,15 @@ const updateWatchStatus = async (row: any) => {
   }
 };
 
-const export2Image = async () => {
+const handleUpdateDate = (date: IAnimeDate, value: string) => {
+  emits("updateDate", date, value);
+};
+
+const handleUpdateLoading = (value: boolean) => {
+  loading.value = value;
+};
+
+const handleExpor2Image = async () => {
   loading.value = true;
   try {
     const canvas = await html2canvas(cardItemRef.value as unknown as HTMLElement);
@@ -238,85 +223,15 @@ const export2Image = async () => {
       });
     });
   } catch (err: any) {
+    console.log(err);
     handleError(err);
   } finally {
     loading.value = false;
   }
 };
 
-const addRecord = () => {
+const handleAddRecord = () => {
   record.value.push({ anime_name: "new anime", watch_status: "待看" });
   waterfallRerender?.();
 };
-
-const delRecord = async () => {
-  try {
-    loading.value = true;
-    const res = await deleteAnimeRecord(props.date.date_id);
-    const { status, msg } = res.data;
-    if (status === 200) {
-      ElMessage.success(`已删除记录 ${props.date.date_name}`);
-    } else {
-      ElMessage.error(msg);
-    }
-  } catch (err: any) {
-    handleError(err);
-  } finally {
-    loading.value = false;
-    elPopoverRef.value?.hide();
-  }
-};
-
-const dblClick = () => {
-  isUpdateDateName.value = true;
-  tempModelValue.value = props.date.date_name;
-  nextTick(() => {
-    dateNameInputRef.value?.focus();
-    waterfallRerender?.();
-  });
-};
-
-const hideUpdateDateName = () => {
-  isUpdateDateName.value = false;
-  waterfallRerender?.();
-};
-
-const updateDateName = async () => {
-  loading.value = true;
-  try {
-    if (tempModelValue.value === props.date.date_name) {
-      return;
-    }
-    const res = await updateRecordDateName(props.date.date_id, tempModelValue.value);
-    const { status, msg } = res.data;
-    if (status === 200) {
-      isUpdateDateName.value = false;
-      ElMessage.success(`修改日期成功`);
-      emits("updateDate", props.date, tempModelValue.value);
-    } else {
-      ElMessage.error(msg);
-    }
-  } catch (err: any) {
-    handleError(err);
-  } finally {
-    loading.value = false;
-    isUpdateDateName.value = false;
-    waterfallRerender?.();
-  }
-};
 </script>
-
-<style scoped lang="less">
-.box-card {
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .button {
-      margin: 0;
-      padding: 0 12px;
-    }
-  }
-}
-</style>

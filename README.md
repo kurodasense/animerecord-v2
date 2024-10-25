@@ -1,39 +1,31 @@
 # animerecord-v2
 
-This template should help get you started developing with Vue 3 in Vite.
+# 业务背景
 
-## Recommended IDE Setup
+animerecord-v1：https://github.com/kurodasense/animerecord
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+想给网站添加新功能，但是原来的项目前端是用 vuecli+vue3+vuex 来开发的，其中使用的 options api ，再加上项目代码结构比较混乱，没有做很好的组件封装，使得添加新功能比较好麻烦。因此，决定花费一些时间来重构一下整个项目。（但是目前还是没能搞好移动端）
 
-## Type Support for `.vue` Imports in TS
+前端技术栈为：
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- vite+vue3+element-plus+pinia+axios+typescript+less
 
-## Customize configuration
+后端技术栈在原来的基础上，添加了 multer+picgo 来实现图片上传：
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- node+express+mysql+multer+picgo
 
-## Project Setup
+# 新的变化
 
-```sh
-npm install
-```
+1. 更友善的用户操作提示。现在只要有什么错误信息，都会通过 message 来弹出来提示。
 
-### Compile and Hot-Reload for Development
+2. 项目代码结构变得更加简洁和合理。一些像`CardItem`、`DirectoryItem`、左边导航栏等组件都做了重写，并且将一些重复代码逻辑都抽出来变成公共组件。组件间、网络请求回来的数据的数据结构也用 interface 来规定好了。
 
-```sh
-npm run dev
-```
+   ![image-20241025162945180](https://raw.githubusercontent.com/kurodasense/cloudimg/master/img/image-20241025162945180.png)
 
-### Type-Check, Compile and Minify for Production
+3. 首页的追番列表现在以瀑布流的形式来展示了（基于 [vue3-waterfall-plugin](https://github.com/heikaimu/vue3-waterfall-plugin) ），页面上看起来更加地美观。
 
-```sh
-npm run build
-```
+4. 在首页的追番记录中，添加了“导出图片”的功能（基于 html2canvas 实现）。当追番记录超过10条就会显示这个按钮出来，用以解决用截屏方式截取追番记录为图片时，截取不完整的问题。
 
-### Lint with [ESLint](https://eslint.org/)
+5. 添加了“ hover 动漫名字的时候，会显示出该动漫的预览图”的功能。在归档页面中可以找到上传相应的动漫的预览图（基于 multer+picgo 实现图片的接受处理和上传到 github 仓库）。
 
-```sh
-npm run lint
-```
+6. 在首页和归档页面中获取列表时的无限网络重试请求。

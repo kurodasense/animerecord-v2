@@ -26,8 +26,8 @@ function isNetworkError(error: any): boolean {
 
 export function handleError(err: any) {
   let msg = "网络错误";
-  if (err?.response?.data) {
-    msg = err.response.data;
+  if (err?.response?.data.msg) {
+    msg = err.response.data.msg;
   } else if (err?.message) {
     msg = err.message;
   }
