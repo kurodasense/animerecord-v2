@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { deleteAnime } from "@/service/api";
+import { handleError } from "@/utils";
 import type { ElPopover } from "element-plus";
 
 const props = defineProps<{ scope: any }>();
@@ -35,8 +36,7 @@ const delAnime = async (row: any) => {
       ElMessage.error(msg);
     }
   } catch (err: any) {
-    const { msg } = err.response.data;
-    ElMessage.error(msg);
+    handleError(err);
   } finally {
     loading.value = false;
     elDeletePopoverRef.value?.hide();

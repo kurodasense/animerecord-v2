@@ -21,6 +21,7 @@
 <script setup lang="ts">
 import { uploadImage } from "@/service/api";
 import type { IAnimeRecord } from "@/service/types";
+import { handleError } from "@/utils";
 import type { ElPopover, UploadRequestOptions } from "element-plus";
 
 const props = defineProps<{ scope: any }>();
@@ -38,14 +39,12 @@ const handleUploadImage = async (options: UploadRequestOptions, row: IAnimeRecor
     const res = await uploadImage(formData);
     const { status, msg } = res.data;
     if (status === 200) {
-      // 处理响应
       ElMessage.success(`上传成功`);
     } else {
       ElMessage.error(msg);
     }
   } catch (err: any) {
-    const { msg } = err.response.data;
-    ElMessage.error(msg);
+    handleError(err);
   } finally {
     loading.value = false;
     elUploadPopoverRef.value?.hide();

@@ -40,6 +40,7 @@ import DeletePopover from "./DeletePopover.vue";
 import { getAnimeRecordByDateId } from "@/service/api";
 import type { IAnimeDate } from "@/service/types";
 import { ElMessage } from "element-plus";
+import { handleError } from "@/utils";
 
 const props = defineProps<{
   date: IAnimeDate;
@@ -63,8 +64,7 @@ const getAnimeRecord = async () => {
       ElMessage.error(msg);
     }
   } catch (err: any) {
-    const { msg } = err.response.data;
-    ElMessage.error(msg);
+    handleError(err);
   } finally {
     loading.value = false;
   }

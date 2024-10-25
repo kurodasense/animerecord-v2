@@ -29,6 +29,7 @@ import { NavType } from "../types";
 import { NavQueryType, type INavPopover } from "../types";
 import { ElInput, ElLoading, ElMessage, ElPopover } from "element-plus";
 import useRootState from "@/stores";
+import { handleError } from "@/utils";
 
 const props = defineProps<INavPopover>();
 const rootStore = useRootState();
@@ -60,8 +61,7 @@ const handleConfirm = async () => {
           ElMessage.error(`失败原因: ${msg}`);
         }
       } catch (err: any) {
-        const { msg } = err.response.data;
-        ElMessage.error(`${msg}`);
+        handleError(err);
       } finally {
         loading.close();
         elPopoverRef.value?.hide();
@@ -80,8 +80,7 @@ const handleConfirm = async () => {
           ElMessage.success(msg);
         }
       } catch (err: any) {
-        const { msg } = err.response.data;
-        ElMessage.error(`${msg}`);
+        handleError(err);
       } finally {
         loading.close();
         elPopoverRef.value?.hide();

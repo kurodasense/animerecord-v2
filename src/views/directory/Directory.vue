@@ -28,6 +28,7 @@ import DirectoryItem from "./cpns/DirectoryItem.vue";
 
 import { getAnimeDate } from "@/service/api";
 import type { IAnimeDate } from "@/service/types";
+import { handleError, retryRequest } from "@/utils";
 import { ElMessage } from "element-plus";
 
 const animeDate = ref<IAnimeDate[]>([]);
@@ -40,7 +41,9 @@ onMounted(() => {
 const getData = async () => {
   loading.value = true;
   try {
-    const res = await getAnimeDate();
+    const res = await retryRequest(getAnimeDate, 5000, () =>
+      ElMessage.warning("网络错误，正在重新获取中")
+    );
     const { status, msg, data } = res.data;
     if (status === 200) {
       animeDate.value = data;
@@ -57,8 +60,7 @@ const getData = async () => {
       ElMessage.error(msg);
     }
   } catch (err: any) {
-    const { msg } = err.response.data;
-    ElMessage.error(msg);
+    handleError(err);
   } finally {
     loading.value = false;
   }

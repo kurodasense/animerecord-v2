@@ -4,17 +4,24 @@ export async function retryRequest<T>(
   retryDelay: number = 2000,
   onRetry?: () => void
 ): Promise<T> {
-  const execute = async (): Promise<T> => {
+  while (true) {
     try {
-      return await asyncFn(); // 直接执行函数
+      return await asyncFn(); // 每次调用 asyncFn
     } catch (error) {
-      if (onRetry) onRetry();
-      await new Promise((resolve) => setTimeout(resolve, retryDelay));
-      return execute(); // 无限重试
+      // 假设网络错误是通过 err.code 或 err.message 判定的
+      if (isNetworkError(error)) {
+        if (onRetry) onRetry(); // 网络请求失败时提示
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      } else {
+        throw error; // 其他错误直接抛出，不重试
+      }
     }
-  };
+  }
+}
 
-  return execute();
+// 判断是否为网络错误的函数
+function isNetworkError(error: any): boolean {
+  return error?.response === undefined || error.message.includes("Network Error");
 }
 
 export function handleError(err: any) {

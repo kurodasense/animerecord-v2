@@ -23,6 +23,7 @@ import type { IAnimeDate } from "@/service/types";
 import { ElMessage } from "element-plus";
 import { Waterfall } from "vue-waterfall-plugin-next";
 import "vue-waterfall-plugin-next/dist/style.css";
+import { retryRequest, handleError } from "@/utils";
 
 const loading = ref(false);
 const anime_date = ref<IAnimeDate[]>([]);
@@ -43,7 +44,9 @@ const sortedAnimeDates = computed(() => {
 const getData = async () => {
   loading.value = true;
   try {
-    const res = await getAnimeDate();
+    const res = await retryRequest(getAnimeDate, 5000, () =>
+      ElMessage.warning("网络错误，正在重新获取中")
+    );
     const { status, msg, data } = res.data;
     if (status === 200) {
       anime_date.value = data;
@@ -51,8 +54,7 @@ const getData = async () => {
       ElMessage.error(msg);
     }
   } catch (err: any) {
-    const { msg } = err.response.data;
-    ElMessage.error(msg);
+    handleError(err);
   } finally {
     loading.value = false;
   }

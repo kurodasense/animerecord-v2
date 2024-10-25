@@ -99,6 +99,7 @@ import { ElCard, ElInput, ElMessage, ElPopover } from "element-plus";
 import moment from "moment";
 import html2canvas from "html2canvas";
 import type { IDateType, IRecordType } from "../types";
+import { handleError } from "@/utils";
 const props = defineProps<{
   date: IDateType;
 }>();
@@ -192,8 +193,7 @@ const updateAnimeName = async (row: any) => {
       ElMessage.error(msg);
     }
   } catch (err: any) {
-    const { msg } = err.response.data;
-    ElMessage.error(msg);
+    handleError(err);
   } finally {
     loading.value = false;
     inputBlur();
@@ -221,8 +221,7 @@ const updateWatchStatus = async (row: any) => {
       ElMessage.error(msg);
     }
   } catch (err: any) {
-    const { msg } = err.response.data;
-    ElMessage.error(msg);
+    handleError(err);
   } finally {
     loading.value = false;
   }
@@ -239,7 +238,7 @@ const export2Image = async () => {
       });
     });
   } catch (err: any) {
-    ElMessage.error(err);
+    handleError(err);
   } finally {
     loading.value = false;
   }
@@ -261,8 +260,7 @@ const delRecord = async () => {
       ElMessage.error(msg);
     }
   } catch (err: any) {
-    const { msg } = err.response.data;
-    ElMessage.error(msg);
+    handleError(err);
   } finally {
     loading.value = false;
     elPopoverRef.value?.hide();
@@ -299,8 +297,7 @@ const updateDateName = async () => {
       ElMessage.error(msg);
     }
   } catch (err: any) {
-    const { msg } = err.response.data;
-    ElMessage.error(msg);
+    handleError(err);
   } finally {
     loading.value = false;
     isUpdateDateName.value = false;
