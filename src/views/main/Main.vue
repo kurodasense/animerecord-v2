@@ -19,12 +19,16 @@
   margin-right: 40px;
 
   .left-nav {
-    width: 400px;
+    flex-basis: 400px;
+    flex-shrink: 1;
+    height: 100vh;
+    top: 0;
+    position: sticky;
   }
 
   .right-content {
     width: 100%;
-    height: 100%;
+    flex-grow: 1;
   }
 }
 </style>
