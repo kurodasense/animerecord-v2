@@ -26,9 +26,7 @@ animerecord-v1：https://github.com/kurodasense/animerecord
 
    ![waterfall](https://raw.githubusercontent.com/kurodasense/cloudimg/master/img/waterfall.gif)
 
-4. 在首页的追番记录中，添加了“导出图片”的功能（基于 html2canvas 实现）。当追番记录超过10条就会显示这个按钮出来，用以解决用截屏方式截取追番记录为图片时，截取不完整的问题。（不知道为什么在 dev 下可以用，但是 prd 下就用不了 ClipboardItem  `Uncaught ReferenceError: ClipboardItem is not defined`），现在改为“下载图片”。
-
-   
+4. 在首页的追番记录中，添加了“导出图片”的功能（基于 html2canvas 实现）。当追番记录超过10条就会显示这个按钮出来，用以解决用截屏方式截取追番记录为图片时，截取不完整的问题。（由于服务器没有做https服务，所以 ClipboardItem 用不了，现在改为“下载图片”）。
 
 5. 添加了“ hover 动漫名字的时候，会显示出该动漫的预览图”的功能。在归档页面中可以找到上传相应的动漫的预览图（基于 multer+picgo 实现图片的接受处理和上传到 github 仓库）。
 
