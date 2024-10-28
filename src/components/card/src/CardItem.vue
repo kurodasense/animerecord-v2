@@ -36,7 +36,7 @@
             <span v-else
               ><el-popover
                 width="500"
-                placement="top"
+                placement="bottom"
                 trigger="hover"
                 :show-after="1000"
                 :disabled="scope.row.image_url == null"

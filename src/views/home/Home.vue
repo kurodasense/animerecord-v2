@@ -7,7 +7,7 @@
       ref="waterfallRef"
       :list="sortedAnimeDates"
       :width="410"
-      align="left"
+      align="center"
       background-color="#f5f7f8"
     >
       <template #default="{ item }">
