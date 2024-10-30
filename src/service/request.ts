@@ -8,7 +8,8 @@ export function request(config: AxiosRequestConfig): Promise<AxiosResponse<IRequ
   });
   const rootState = useRootState();
   instance.interceptors.request.use((config) => {
-    if (rootState.token) config.headers.Authorization = rootState.token;
+    const token = rootState.getToken();
+    if (token) config.headers.Authorization = token;
     return config;
   });
   return instance(config);

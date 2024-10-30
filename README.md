@@ -34,6 +34,8 @@ animerecord-v1：https://github.com/kurodasense/animerecord
 
 6. 在首页和归档页面中获取列表时的支持无限的网络重试请求。
 
+7. 以前的权限验证之后，后端返回的 JWT 是存到 pinia 中，所以一当网页刷新时， JWT 就会被清除，进而需要重新做权限验证。而现在 JWT 就存到了 sessionStorage 中，避免了刷新被清除的问题。
+
 # 难点
 
 1. 基于 multer+picgo 来实现图片的上传和保存：[自己写到了csdn上](https://blog.csdn.net/kurodasense/article/details/143231374?spm=1001.2014.3001.5502)。
