@@ -1,0 +1,13 @@
+diff --git a/node_modules/vue-waterfall-plugin-next/dist/my-lib.es.js b/node_modules/vue-waterfall-plugin-next/dist/my-lib.es.js
+index 7cc6e4c..5e09c44 100644
+--- a/node_modules/vue-waterfall-plugin-next/dist/my-lib.es.js
++++ b/node_modules/vue-waterfall-plugin-next/dist/my-lib.es.js
+@@ -237,7 +237,7 @@ function useLayout(props, colWidth, cols, offsetX, waterfallWrapper) {
+         const curX = getX(minYIndex);
+         const style = curItem.style;
+         if (transform)
+-          style[transform] = `translate3d(${curX}px,${minY}px, 0)`;
++          style[transform] = `translate3d(${Math.ceil(curX)}px,${Math.ceil(minY)}px, 0)`;
+         style.width = `${colWidth.value}px`;
+         style.visibility = "visible";
+         const { height } = curItem.getBoundingClientRect();
