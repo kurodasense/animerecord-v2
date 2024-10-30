@@ -49,10 +49,6 @@ const props = defineProps<{
 const record = ref<any[]>([]);
 const loading = ref(false);
 
-onMounted(() => {
-  getAnimeRecord();
-});
-
 const getAnimeRecord = async () => {
   loading.value = true;
   try {
@@ -84,6 +80,8 @@ const cellStyle = ({ row, columnIndex }: any) => {
 const updateRecord = (row: any) => {
   record.value.splice(record.value.indexOf(row), 1);
 };
+
+getAnimeRecord();
 </script>
 
 <style scoped lang="less"></style>

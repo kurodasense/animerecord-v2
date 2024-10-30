@@ -96,7 +96,7 @@ const cardItemRef = ref<HTMLDivElement>();
 const tempModelValue = ref("");
 const emits = defineEmits(["updateDate"]);
 
-onMounted(async () => {
+const getData = async () => {
   loading.value = true;
   try {
     const res = await getAnimeRecordByDateId(props.date.date_id);
@@ -112,8 +112,7 @@ onMounted(async () => {
     loading.value = false;
     waterfallRerender?.();
   }
-});
-
+};
 const cellStyle = ({ row, columnIndex }: any) => {
   switch (row.watch_status) {
     case "待看":
@@ -231,4 +230,6 @@ const handleAddRecord = () => {
   record.value.push({ anime_name: "new anime", watch_status: "待看" });
   waterfallRerender?.();
 };
+
+getData();
 </script>

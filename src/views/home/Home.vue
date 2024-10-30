@@ -60,10 +60,6 @@ const getData = async () => {
   }
 };
 
-onMounted(() => {
-  getData();
-});
-
 const handleUpdateDate = (date: IAnimeDate, value: string) => {
   const index = anime_date.value.findIndex((item) => item.date_id === date.date_id);
   anime_date.value[index].date_name = value;
@@ -74,6 +70,11 @@ const waterfallRerender = () => {
   waterfallRef.value?.renderer();
 };
 
+getData();
+
+onMounted(() => {
+  waterfallRerender();
+});
 provide("waterfallRerender", waterfallRerender);
 </script>
 

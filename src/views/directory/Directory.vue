@@ -34,10 +34,6 @@ import { ElMessage } from "element-plus";
 const animeDate = ref<IAnimeDate[]>([]);
 const loading = ref(false);
 
-onMounted(() => {
-  getData();
-});
-
 const getData = async () => {
   loading.value = true;
   try {
@@ -65,6 +61,8 @@ const getData = async () => {
     loading.value = false;
   }
 };
+
+getData();
 </script>
 
 <style scoped lang="less">
