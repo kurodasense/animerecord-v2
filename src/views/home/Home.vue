@@ -9,9 +9,10 @@
       :width="410"
       align="center"
       background-color="#f5f7f8"
+      rowKey="date_id"
     >
       <template #default="{ item }">
-        <card-item :date="item" :key="item.date_id" @updateDate="handleUpdateDate" />
+        <card-item :date="item" @updateDate="handleUpdateDate" />
       </template>
     </Waterfall>
   </div>
