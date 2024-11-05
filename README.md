@@ -32,9 +32,11 @@ animerecord-v1：https://github.com/kurodasense/animerecord
 
    ![upload](https://raw.githubusercontent.com/kurodasense/cloudimg/master/img/upload.gif)
 
-6. 在首页和归档页面中获取列表时的支持无限的网络重试请求。
+6. 现在点击动漫名称可以跳转到萌娘百科的相关条目，但是这个功能是简单通过拼接url来实现的，所以有可能名称错误的话会跳转到404页面。
 
-7. 以前的权限验证之后，后端返回的 JWT 是存到 pinia 中，所以一当网页刷新时， JWT 就会被清除，进而需要重新做权限验证。而现在 JWT 就存到了 sessionStorage 中，避免了刷新被清除的问题。
+7. 在首页和归档页面中获取列表时的支持无限的网络重试请求。
+
+8. 以前的权限验证之后，后端返回的 JWT 是存到 pinia 中，所以一当网页刷新时， JWT 就会被清除，进而需要重新做权限验证。而现在 JWT 就存到了 sessionStorage 中，避免了刷新被清除的问题。
 
 # 难点
 

@@ -22,9 +22,9 @@
         :row-class-name="tableRowClassName"
         @cell-dblclick="tabClick"
       >
-        <el-table-column prop="anime_name" label="anime_name" width="auto">
+        <el-table-column prop="anime_name" label="anime_name">
           <template #default="scope">
-            <span v-if="scope.row.index === tabClickIndex && tabClickLabel === 'anime_name'">
+            <template v-if="scope.row.index === tabClickIndex && tabClickLabel === 'anime_name'">
               <el-input
                 v-model="tempModelValue"
                 autosize
@@ -32,9 +32,9 @@
                 @blur="inputBlur"
                 @keyup.enter="updateAnimeName(scope.row)"
               />
-            </span>
-            <span v-else
-              ><el-popover
+            </template>
+            <template v-else>
+              <el-popover
                 width="500"
                 placement="bottom"
                 trigger="hover"
@@ -46,22 +46,30 @@
                     <el-image :src="scope.row.image_url" fit="contain" />
                   </div>
                 </template>
-                <template #reference> {{ scope.row.anime_name }} </template>
-              </el-popover></span
-            >
+                <template #reference>
+                  <a
+                    class="column-anime_name"
+                    :href="`https://zh.moegirl.org.cn/${scope.row.anime_name}`"
+                    target="_blank"
+                  >
+                    {{ scope.row.anime_name }}
+                  </a>
+                </template>
+              </el-popover>
+            </template>
           </template>
         </el-table-column>
         <el-table-column prop="watch_status" label="watch_status" width="80" align="center">
           <template #default="scope">
-            <span v-if="scope.row.index === tabClickIndex && tabClickLabel === 'watch_status'">
+            <template v-if="scope.row.index === tabClickIndex && tabClickLabel === 'watch_status'">
               <el-input
                 v-model="tempModelValue"
                 ref="elInputRef"
                 @blur="inputBlur"
                 @keyup.enter="updateWatchStatus(scope.row)"
               />
-            </span>
-            <span v-else>{{ scope.row.watch_status }}</span>
+            </template>
+            <template v-else>{{ scope.row.watch_status }}</template>
           </template>
         </el-table-column>
       </el-table>
@@ -233,3 +241,11 @@ const handleAddRecord = () => {
 
 getData();
 </script>
+
+<style lang="less" scoped>
+.column-anime_name:hover {
+  text-decoration: none;
+  color: #409eff;
+  font-weight: 500;
+}
+</style>
