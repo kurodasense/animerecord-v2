@@ -87,7 +87,7 @@ import {
 import { ElCard, ElInput, ElMessage, ElPopover } from "element-plus";
 import moment from "moment";
 import type { IDateType, IRecordType } from "../types";
-import { downloadImage, handleError } from "@/utils";
+import { downloadImage, handleError, retryRequest } from "@/utils";
 import type { IAnimeDate } from "@/service/types";
 import html2canvas from "html2canvas";
 const props = defineProps<{
@@ -107,7 +107,13 @@ const emits = defineEmits(["updateDate"]);
 const getData = async () => {
   loading.value = true;
   try {
-    const res = await getAnimeRecordByDateId(props.date.date_id);
+    const res = await retryRequest(
+      () => getAnimeRecordByDateId(props.date.date_id),
+      2000,
+      () => {
+        console.log("网络错误，正在重试...");
+      }
+    );
     const { status, msg, data } = res.data;
     if (status === 200) {
       record.value = data;
