@@ -32,12 +32,17 @@ animerecord-v1：https://github.com/kurodasense/animerecord
 
    ![upload](https://raw.githubusercontent.com/kurodasense/cloudimg/master/img/upload.gif)
 
-6. 现在点击动漫名称可以跳转到萌娘百科的相关条目，但是这个功能是简单通过拼接url来实现的，所以有可能名称错误的话会跳转到404页面。
+6. 图片懒加载：图片是 hover 的时候才进行展示的，所以不应该在加载页面时就全部将它们加载出来，而是当 hover 时，出现在可视窗口内才将图片展示出来。这样可以减少不必要的图片网络请求。
 
-7. 在首页和归档页面中获取列表时的支持无限的网络重试请求。
+   ![lazyload](https://raw.githubusercontent.com/kurodasense/cloudimg/master/img/lazyload.gif)
 
-8. 以前的权限验证之后，后端返回的 JWT 是存到 pinia 中，所以一当网页刷新时， JWT 就会被清除，进而需要重新做权限验证。而现在 JWT 就存到了 sessionStorage 中，避免了刷新被清除的问题。
+7. 现在点击动漫名称可以跳转到萌娘百科的相关条目，但是这个功能是简单通过拼接 url 来实现的，所以有可能名称错误的话会跳转到404页面。
+
+8. 在首页和归档页面中获取列表时的支持无限的网络重试请求。
+
+9. 以前的权限验证之后，后端返回的 JWT 是存到 pinia 中，所以一当网页刷新时， JWT 就会被清除，进而需要重新做权限验证。而现在 JWT 就存到了 sessionStorage 中，避免了刷新被清除的问题。
 
 # 难点
 
 1. 基于 multer+picgo 来实现图片的上传和保存：[自己写到了csdn上](https://blog.csdn.net/kurodasense/article/details/143231374?spm=1001.2014.3001.5502)。
+1. 基于原生 IntersectionObserver 的图片懒加载组件封装。

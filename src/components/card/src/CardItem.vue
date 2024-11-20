@@ -43,7 +43,8 @@
               >
                 <template #default>
                   <div style="display: flex; justify-content: center">
-                    <el-image :src="scope.row.image_url" fit="contain" />
+                    <!-- <el-image :src="scope.row.image_url" fit="contain" /> -->
+                    <LazyImage :src="scope.row.image_url" />
                   </div>
                 </template>
                 <template #reference>
@@ -79,6 +80,7 @@
 
 <script setup lang="ts">
 import CardHeader from "./CardHeader.vue";
+import LazyImage from "@/components/lazy-image/src/LazyImage.vue";
 import {
   getAnimeRecordByDateId,
   updateNewAnimeRecord,
