@@ -38,7 +38,7 @@ const props = defineProps<{
   recordLength: number;
 }>();
 
-const emits = defineEmits(["updateLoading", "updateDate", "expor2Image", "addRecord"]);
+const emits = defineEmits(["updateLoading", "updateDate", "export2Image", "addRecord"]);
 
 const waterfallRerender = inject<() => void>("waterfallRerender"); // 注入父组件方法
 
@@ -86,7 +86,7 @@ const updateDateName = async () => {
 };
 
 const export2Image = async () => {
-  emits("expor2Image");
+  emits("export2Image");
 };
 
 const addRecord = () => {

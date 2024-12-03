@@ -7,7 +7,7 @@
           :recordLength="record.length"
           @updateLoading="handleUpdateLoading"
           @updateDate="handleUpdateDate"
-          @expor2Image="handleExpor2Image"
+          @export2Image="handleExport2Image"
           @addRecord="handleAddRecord"
         />
       </template>
@@ -129,6 +129,7 @@ const getData = async () => {
     waterfallRerender?.();
   }
 };
+
 const cellStyle = ({ row, columnIndex }: any) => {
   switch (row.watch_status) {
     case "待看":
@@ -227,7 +228,7 @@ const handleUpdateLoading = (value: boolean) => {
   loading.value = value;
 };
 
-const handleExpor2Image = async () => {
+const handleExport2Image = async () => {
   loading.value = true;
   try {
     const canvas = await html2canvas(cardItemRef.value as unknown as HTMLElement);

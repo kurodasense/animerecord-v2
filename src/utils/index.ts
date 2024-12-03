@@ -37,12 +37,11 @@ export function handleError(err: any) {
 export function downloadImage(blob: Blob) {
   // 创建一个URL对象并指向blob数据
   const url = URL.createObjectURL(blob);
-  // 创建一个<a>元素用于下载
   const link = document.createElement("a");
   link.href = url;
   link.download = "downloaded-image.png"; // 设置下载文件的默认名称
   document.body.appendChild(link);
-  link.click(); // 自动点击触发下载
-  document.body.removeChild(link); // 移除元素
+  link.click();
+  document.body.removeChild(link);
   URL.revokeObjectURL(url); // 释放blob的URL对象
 }
