@@ -15,6 +15,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist --repo git@github.com:kurodasense/animerecord-v2.git"
   },
+  "base": "/animerecord-v2/",
   "homepage": "https://kurodasense.github.io/animerecord-v2/",
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
