@@ -42,7 +42,10 @@ animerecord-v1：https://github.com/kurodasense/animerecord
 
 9. 以前的权限验证之后，后端返回的 JWT 是存到 pinia 中，所以一当网页刷新时， JWT 就会被清除，进而需要重新做权限验证。而现在 JWT 就存到了 sessionStorage 中，避免了刷新被清除的问题。
 
+10. 现在添加新的追番记录后，后端会自动调用 google custom search api 实现图片搜索，将搜索到的第一张图片 url 存到数据库中（减少自己手动添加图片的可能性，但是可能会存在图片防盗链的情况）。
+
 # 难点
 
 1. 基于 multer+picgo 来实现图片的上传和保存：[自己写到了csdn上](https://blog.csdn.net/kurodasense/article/details/143231374?spm=1001.2014.3001.5502)。
 1. 基于原生 IntersectionObserver 的图片懒加载组件封装。
+1. 结合 google custom search api 实现图片搜索。
