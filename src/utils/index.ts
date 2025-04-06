@@ -33,15 +33,3 @@ export function handleError(err: any) {
   } else msg = err;
   ElMessage.error(msg);
 }
-
-export function downloadImage(blob: Blob) {
-  // 创建一个URL对象并指向blob数据
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "downloaded-image.png"; // 设置下载文件的默认名称
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url); // 释放blob的URL对象
-}

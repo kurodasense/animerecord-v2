@@ -43,7 +43,6 @@
               >
                 <template #default>
                   <div style="display: flex; justify-content: center">
-                    <!-- <el-image :src="scope.row.image_url" fit="contain" /> -->
                     <LazyImage :src="scope.row.image_url" />
                   </div>
                 </template>
@@ -89,7 +88,7 @@ import {
 import { ElCard, ElInput, ElMessage, ElPopover } from "element-plus";
 import moment from "moment";
 import type { IDateType, IRecordType } from "../types";
-import { downloadImage, handleError, retryRequest } from "@/utils";
+import { handleError, retryRequest } from "@/utils";
 import type { IAnimeDate } from "@/service/types";
 import html2canvas from "html2canvas";
 const props = defineProps<{
@@ -232,9 +231,18 @@ const handleExport2Image = async () => {
   loading.value = true;
   try {
     const canvas = await html2canvas(cardItemRef.value as unknown as HTMLElement);
-    canvas.toBlob((blob) => {
-      downloadImage(blob!);
-      ElMessage.success(`导出图片成功`);
+    canvas.toBlob(async (blob) => {
+      if (blob) {
+        try {
+          // 复制到剪切板
+          const item = new ClipboardItem({ [blob.type]: blob });
+          await navigator.clipboard.write([item]);
+          ElMessage.success(`导出图片成功`);
+        } catch (err) {
+          handleError(err);
+          ElMessage.success(`导出图片成功，但复制到剪贴板失败`);
+        }
+      }
     });
   } catch (err: any) {
     handleError(err);

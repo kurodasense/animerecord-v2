@@ -1,5 +1,7 @@
 # animerecord-v2
 
+目前这个当作是后台管理系统了，现在有更能直观展示 animerecord 的网站：https://github.com/kurodasense/animerecord-react-version
+
 # 业务背景
 
 animerecord-v1：https://github.com/kurodasense/animerecord
@@ -26,7 +28,7 @@ animerecord-v1：https://github.com/kurodasense/animerecord
 
    ![waterfall](https://raw.githubusercontent.com/kurodasense/cloudimg/master/img/waterfall.gif)
 
-4. 在首页的追番记录中，添加了“导出图片”的功能（基于 html2canvas 实现）。当追番记录超过10条就会显示这个按钮出来，用以解决用截屏方式截取追番记录为图片时，截取不完整的问题。（由于服务器没有做https服务，所以 ClipboardItem 用不了，现在改为“下载图片”）。
+4. 在首页的追番记录中，添加了“导出图片”的功能（基于 html2canvas 实现）。当追番记录超过10条就会显示这个按钮出来，用以解决用截屏方式截取追番记录为图片时，截取不完整的问题。
 
 5. 添加了“ hover 动漫名字的时候，会显示出该动漫的预览图”的功能。在归档页面中可以找到上传相应的动漫的预览图（基于 multer+picgo 实现图片的接受处理和上传到 github 仓库）。
 
